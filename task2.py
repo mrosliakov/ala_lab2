@@ -9,10 +9,6 @@ def reconstruct_image(pca, image_matrix, n_components):
     reconstructed = pca_k.inverse_transform(transformed)
     return reconstructed
 
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-
 def analyze_variance(pca):
     cumulative_var = np.cumsum(pca.explained_variance_ratio_) * 100
     comp_95perc = np.argmax(cumulative_var >= 95) + 1
@@ -31,6 +27,22 @@ def analyze_variance(pca):
     plt.show()
 
     return comp_95perc
+
+def plot_comparisons(image_matrix):
+    component_counts = [5, 15, 25, 75, 100, 170]
+    
+    plt.figure(figsize=(15, 10))
+    
+    for i, n in enumerate(component_counts):
+        rec_img = reconstruct_image(None, image_matrix, n) 
+        
+        plt.subplot(2, 3, i + 1)
+        plt.imshow(rec_img, cmap='gray')
+        plt.title(f"Components: {n}")
+        plt.axis('off')
+        
+    plt.tight_layout()
+    plt.show()
 
 if __name__ == "__main__":
     image_raw = imread("photo.jpg")
@@ -54,7 +66,7 @@ if __name__ == "__main__":
     plt.axis('off')
     plt.show()
     
-    
+    plot_comparisons(image_bw)
     
 
     
